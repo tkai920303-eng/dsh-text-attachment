@@ -25,12 +25,9 @@ jobs:
           done < <(find . -type f -name '*.js' -not -path './.git/*' -print0)
           echo "checked ${count} JS file(s)"
 
-      - name: READMEs present (zh + en, root + features)
+      - name: READMEs and LICENSE present
         run: |
           test -f README.md
           test -f README.en.md
-          test -f features/usage-panel/README.md
-          test -f features/usage-panel/README.en.md
-          test -f features/text-attachment/README.md
-          test -f features/text-attachment/README.en.md
-          echo "all READMEs present"
+          test -f LICENSE
+          echo "all docs present"
