@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  syntax-and-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: node --check every JS file
+        run: |
+          set -e
+          count=0
+          while IFS= read -r -d '' f; do
+            node --check "$f"
+            count=$((count + 1))
+          done < <(find . -type f -name '*.js' -not -path './.git/*' -print0)
+          echo "checked ${count} JS file(s)"
+
+      - name: READMEs present (zh + en, root + features)
+        run: |
+          test -f README.md
+          test -f README.en.md
+          test -f features/usage-panel/README.md
+          test -f features/usage-panel/README.en.md
+          test -f features/text-attachment/README.md
+          test -f features/text-attachment/README.en.md
+          echo "all READMEs present"
